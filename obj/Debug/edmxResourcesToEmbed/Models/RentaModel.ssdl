@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="BDPeliculasModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Clientes">
+    <Key>
+      <PropertyRef Name="IdCliente" />
+    </Key>
+    <Property Name="IdCliente" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nombre" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Apellidos" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Telefono" Type="nvarchar" MaxLength="20" />
+  </EntityType>
+  <EntityType Name="Peliculas">
+    <Key>
+      <PropertyRef Name="IdPeliculas" />
+    </Key>
+    <Property Name="IdPeliculas" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Titulo" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Director" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Genero" Type="nvarchar" MaxLength="20" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Rentas">
+    <Key>
+      <PropertyRef Name="IdRenta" />
+    </Key>
+    <Property Name="IdRenta" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IdCliente" Type="int" Nullable="false" />
+    <Property Name="IdPeliculas" Type="int" Nullable="false" />
+    <Property Name="Fecha" Type="datetime" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Rentas_Clientes">
+    <End Role="Clientes" Type="Self.Clientes" Multiplicity="1" />
+    <End Role="Rentas" Type="Self.Rentas" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Clientes">
+        <PropertyRef Name="IdCliente" />
+      </Principal>
+      <Dependent Role="Rentas">
+        <PropertyRef Name="IdCliente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Rentas_Peliculas">
+    <End Role="Peliculas" Type="Self.Peliculas" Multiplicity="1" />
+    <End Role="Rentas" Type="Self.Rentas" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Peliculas">
+        <PropertyRef Name="IdPeliculas" />
+      </Principal>
+      <Dependent Role="Rentas">
+        <PropertyRef Name="IdPeliculas" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="BDPeliculasModelStoreContainer">
+    <EntitySet Name="Clientes" EntityType="Self.Clientes" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Peliculas" EntityType="Self.Peliculas" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Rentas" EntityType="Self.Rentas" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Rentas_Clientes" Association="Self.FK_Rentas_Clientes">
+      <End Role="Clientes" EntitySet="Clientes" />
+      <End Role="Rentas" EntitySet="Rentas" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Rentas_Peliculas" Association="Self.FK_Rentas_Peliculas">
+      <End Role="Peliculas" EntitySet="Peliculas" />
+      <End Role="Rentas" EntitySet="Rentas" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

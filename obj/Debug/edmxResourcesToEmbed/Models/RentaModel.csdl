@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="BDPeliculasModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Clientes">
+    <Key>
+      <PropertyRef Name="IdCliente" />
+    </Key>
+    <Property Name="IdCliente" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Apellidos" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Telefono" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Rentas" Relationship="BDPeliculasModel.FK_Rentas_Clientes" FromRole="Clientes" ToRole="Rentas" />
+  </EntityType>
+  <EntityType Name="Peliculas">
+    <Key>
+      <PropertyRef Name="IdPeliculas" />
+    </Key>
+    <Property Name="IdPeliculas" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Titulo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Director" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Genero" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Rentas" Relationship="BDPeliculasModel.FK_Rentas_Peliculas" FromRole="Peliculas" ToRole="Rentas" />
+  </EntityType>
+  <EntityType Name="Rentas">
+    <Key>
+      <PropertyRef Name="IdRenta" />
+    </Key>
+    <Property Name="IdRenta" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="IdCliente" Type="Int32" Nullable="false" />
+    <Property Name="IdPeliculas" Type="Int32" Nullable="false" />
+    <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="Clientes" Relationship="BDPeliculasModel.FK_Rentas_Clientes" FromRole="Rentas" ToRole="Clientes" />
+    <NavigationProperty Name="Peliculas" Relationship="BDPeliculasModel.FK_Rentas_Peliculas" FromRole="Rentas" ToRole="Peliculas" />
+  </EntityType>
+  <EntityContainer Name="BDPeliculasEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Clientes" EntityType="Self.Clientes" />
+    <EntitySet Name="Peliculas" EntityType="Self.Peliculas" />
+    <EntitySet Name="Rentas" EntityType="Self.Rentas" />
+    <AssociationSet Name="FK_Rentas_Clientes" Association="BDPeliculasModel.FK_Rentas_Clientes">
+      <End Role="Clientes" EntitySet="Clientes" />
+      <End Role="Rentas" EntitySet="Rentas" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Rentas_Peliculas" Association="BDPeliculasModel.FK_Rentas_Peliculas">
+      <End Role="Peliculas" EntitySet="Peliculas" />
+      <End Role="Rentas" EntitySet="Rentas" />
+    </AssociationSet>
+  </EntityContainer>
+  <Association Name="FK_Rentas_Clientes">
+    <End Type="BDPeliculasModel.Clientes" Role="Clientes" Multiplicity="1" />
+    <End Type="BDPeliculasModel.Rentas" Role="Rentas" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Clientes">
+        <PropertyRef Name="IdCliente" />
+      </Principal>
+      <Dependent Role="Rentas">
+        <PropertyRef Name="IdCliente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Rentas_Peliculas">
+    <End Type="BDPeliculasModel.Peliculas" Role="Peliculas" Multiplicity="1" />
+    <End Type="BDPeliculasModel.Rentas" Role="Rentas" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Peliculas">
+        <PropertyRef Name="IdPeliculas" />
+      </Principal>
+      <Dependent Role="Rentas">
+        <PropertyRef Name="IdPeliculas" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
